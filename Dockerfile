@@ -14,15 +14,18 @@ RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources
 RUN ln -s /bin/echo /bin/systemctl
 RUN wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add -
 RUN echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" | tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+#manually installing libssl1.1
+RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
+RUN dpkg -i libssl1.1_1.1.0g-2ubuntu4_amd64.deb
 RUN apt-get -y update
 RUN apt-get install -y mongodb-org
 
 # Install Yarn
 RUN apt-get install -y yarn
 
-# Install PIP
-RUN easy_install pip
-
+# Upgrade existing PIP
+# Downgrade PIP to bypass strict metadata errors in legacy packages
+RUN pip install "pip<24.1" setuptools wheel
 
 ENV ENV_TYPE staging
 ENV MONGO_HOST mongo
