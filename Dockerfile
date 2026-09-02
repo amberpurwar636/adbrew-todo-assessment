@@ -23,8 +23,7 @@ RUN apt-get install -y mongodb-org
 # Install Yarn
 RUN apt-get install -y yarn
 
-# Upgrade existing PIP
-# Downgrade PIP to bypass strict metadata errors in legacy packages
+# Downgraded PIP to bypass strict metadata errors in legacy packages
 RUN pip install "pip<24.1" setuptools wheel
 
 ENV ENV_TYPE staging
